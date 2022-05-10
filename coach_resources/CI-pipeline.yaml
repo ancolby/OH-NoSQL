@@ -1,0 +1,34 @@
+---
+resources:
+  -
+    repo: self
+trigger:
+  branches:
+    exclude:
+    - master
+steps:
+  -
+    task: NodeTool@0
+    inputs:
+      checkLatest: true
+      versionSpec: 10.x
+    displayName: "Use Node 10.x"
+  -
+    bash: |
+        sudo npm install -g markdownlint-cli
+        sudo npm install jsonlint -g
+    displayName: "Download packages"
+  -
+    bash: |
+        markdownlint -c .markdownlint.json ./portal
+    displayName: "Linting OpenHack content"
+  -
+    bash: |
+        markdownlint -c .markdownlint.json ./resources
+    displayName: "Linting Resources"
+  -
+    bash: |
+        jsonlint -q ./portal/$(variant)/lab-content-definition.json
+    displayName: "Execute json linter"
+variables:
+  variant: en

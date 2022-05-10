@@ -1,0 +1,49 @@
+{
+    "Title": "microsoft-open-hack-app-modernization-with-nosql",
+    "Description" : "OpenHack Challenges for App Modernization with NoSQL",
+    "OverviewUrl" : "Overview.html",
+    "ContentVersion": "2.0",
+    "ContentPackage": {
+      "ContentItems": [
+        {
+          "Order": 1,
+          "Title": "Challenge 1: Provision NoSQL Database",
+          "Description": "Select and provision a database",
+          "Url": "1-provision-nosql-database.html"
+        },
+        {
+          "Order": 2,
+           "Title": "Challenge 2: Migrate to NoSQL",
+           "Description": "Migrate data to database",
+           "Url": "2-migrate-to-nosql.html"
+        },
+        {
+            "Order": 3,
+             "Title": "Challenge 3: Optimize",
+             "Description": "Find and use optimal partitioning key to optimize database",
+             "Url": "3-optimize.html"
+        },
+        {
+            "Order": 4,
+             "Title": "Challenge 4: Event Sourcing",
+             "Description": "Create process to consume and ingest data into database",
+             "Url": "4-event-sourcing.html"
+        },
+        {
+            "Order": 5,
+             "Title": "Challenge 5: Search",
+             "Description": "Apply search functionality to the database",
+             "Url": "5-search.html"
+        },
+        {
+            "Order": 6,
+             "Title": "Challenge 6: Take Over the World",
+             "Description": "Expand data storage across regions to scale the database",
+             "Url": "6-take-over-the-world.html"
+        }
+
+
+       
+      ]
+    }
+  }
