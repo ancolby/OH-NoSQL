@@ -1,5 +1,5 @@
 {
-	"name": "dataflow1",
+	"name": "OptimiseItems",
 	"properties": {
 		"type": "MappingDataFlow",
 		"typeProperties": {
