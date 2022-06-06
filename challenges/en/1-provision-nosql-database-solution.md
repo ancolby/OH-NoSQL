@@ -49,3 +49,36 @@ While it is fairly straightforward to install a database within a VM or containe
 ### Bottom line
 
 Cosmos DB, coupled with SQL API, is going to be the most time-efficient choice. The MongoDB API is likely a good alternative since data will look very similar to Cosmos DB (they'll be able to compare notes with table-neighbors), it's a fairly popular skillset, and with the help of Azure Functions, they should be able to overcome the obstacles posed by Data Factory and Stream Analytics (assuming they go with those tools).
+
+### Solution Implementation
+
+#### Success criteria
+
+* Select and provision a database with the following characteristics:
+  * Enables a simplified process for scaling up and down
+  * Supports the event sourcing pattern where changes to the data store trigger events that can be processed by any number of listening components in near real-time
+  * Supports a flexible schema with a multi-region, global distribution
+  * Store any arbitrary record in the database.
+
+#### Simplified process for scaling up and down
+
+Options for scaling:#
+
+* **Horizontal**: Changing the number of nodes (or workers) within a cluster.
+* **Vertical**: Changing the size of the worker node(s)
+* **Throughput**: For services where abstraction of processing capacity has taken place. e.g. RUs for Azure Cosmos DB.
+
+Request Units (RUs) in Azure Cosmos DB:
+
+_The cost of all database operations is normalized by Azure Cosmos DB and is expressed by Request Units (or RUs, for short). You can think of RUs per second as the currency for throughput. RUs per second is a rate-based currency. It abstracts the system resources such as CPU, IOPS, and memory that are required to perform the database operations supported by Azure Cosmos DB._
+
+See: <https://docs.microsoft.com/en-gb/azure/cosmos-db/request-units>
+
+#### Supports the event sourcing pattern
+
+See: [https://docs.microsoft.com/en-gb/azure/architecture/patterns/event-sourcing](https://docs.microsoft.com/en-gb/azure/architecture/patterns/event-sourcing)
+
+![An overview and example of the Event Sourcing pattern](https://docs.microsoft.com/en-gb/azure/architecture/patterns/_images/event-sourcing-overview.png)
+
+#### Supports a flexible schema with a multi-region, global distribution
+See: [https://docs.microsoft.com/en-us/azure/cosmos-db/distribute-data-globally](https://docs.microsoft.com/en-us/azure/cosmos-db/distribute-data-globally)
