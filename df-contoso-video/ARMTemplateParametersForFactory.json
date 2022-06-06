@@ -1,0 +1,21 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "df-contoso-video"
+		},
+		"AzSQL_Contoso_Video_connectionString": {
+			"value": ""
+		},
+		"Contoso Video Azure Function_functionKey": {
+			"value": ""
+		},
+		"CosmosDb_Contoso_Video_connectionString": {
+			"value": ""
+		},
+		"Contoso Video Azure Function_properties_typeProperties_functionAppUrl": {
+			"value": "https://fn-contoso-video.azurewebsites.net"
+		}
+	}
+}

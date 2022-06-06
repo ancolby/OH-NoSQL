@@ -1,0 +1,1785 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "df-contoso-video"
+		},
+		"AzSQL_Contoso_Video_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzSQL_Contoso_Video'"
+		},
+		"Contoso Video Azure Function_functionKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'functionKey' of 'Contoso Video Azure Function'"
+		},
+		"CosmosDb_Contoso_Video_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'CosmosDb_Contoso_Video'"
+		},
+		"Contoso Video Azure Function_properties_typeProperties_functionAppUrl": {
+			"type": "string",
+			"defaultValue": "https://fn-contoso-video.azurewebsites.net"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/Contoso Video - SQL to Cosmos')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy Cartitem",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "Azure Function - CleanCosmos",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"sink": {
+								"type": "CosmosDbSqlApiSink",
+								"writeBehavior": "insert"
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "CartItemId",
+											"type": "String"
+										},
+										"sink": {
+											"path": "CartItemId"
+										}
+									},
+									{
+										"source": {
+											"name": "CartId",
+											"type": "String"
+										},
+										"sink": {
+											"path": "CartId"
+										}
+									},
+									{
+										"source": {
+											"name": "ItemId",
+											"type": "Int32"
+										},
+										"sink": {
+											"path": "ItemId"
+										}
+									},
+									{
+										"source": {
+											"name": "Quantity",
+											"type": "Int32"
+										},
+										"sink": {
+											"path": "Quantity"
+										}
+									},
+									{
+										"source": {
+											"name": "DateCreated",
+											"type": "DateTime"
+										},
+										"sink": {
+											"path": "DateCreated"
+										}
+									}
+								]
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "SQL_Cartitem",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "Cosmos_CartItem",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					},
+					{
+						"name": "Copy Category",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "Azure Function - CleanCosmos",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"sink": {
+								"type": "CosmosDbSqlApiSink",
+								"writeBehavior": "insert"
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "CategoryId",
+											"type": "Int32"
+										},
+										"sink": {
+											"path": "$['CategoryId']"
+										}
+									},
+									{
+										"source": {
+											"name": "CategoryName",
+											"type": "String"
+										},
+										"sink": {
+											"path": "$['CategoryName']"
+										}
+									},
+									{
+										"source": {
+											"name": "Description",
+											"type": "String"
+										},
+										"sink": {
+											"path": "$['Description']"
+										}
+									},
+									{
+										"source": {
+											"name": "Products",
+											"type": "String"
+										},
+										"sink": {
+											"path": "$['Products']"
+										}
+									}
+								]
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "SQL_Category",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "Cosmos_Category",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					},
+					{
+						"name": "Copy Event",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "Azure Function - CleanCosmos",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"sink": {
+								"type": "CosmosDbSqlApiSink",
+								"writeBehavior": "insert"
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "id",
+											"type": "String"
+										},
+										"sink": {
+											"path": "$['id']"
+										}
+									},
+									{
+										"source": {
+											"name": "event",
+											"type": "String"
+										},
+										"sink": {
+											"path": "$['event']"
+										}
+									},
+									{
+										"source": {
+											"name": "userId",
+											"type": "Int32"
+										},
+										"sink": {
+											"path": "$['userId']"
+										}
+									},
+									{
+										"source": {
+											"name": "itemId",
+											"type": "Int32"
+										},
+										"sink": {
+											"path": "$['itemId']"
+										}
+									},
+									{
+										"source": {
+											"name": "orderId",
+											"type": "Int32"
+										},
+										"sink": {
+											"path": "$['orderId']"
+										}
+									},
+									{
+										"source": {
+											"name": "contentId",
+											"type": "Int32"
+										},
+										"sink": {
+											"path": "$['contentId']"
+										}
+									},
+									{
+										"source": {
+											"name": "sessionId",
+											"type": "String"
+										},
+										"sink": {
+											"path": "$['sessionId']"
+										}
+									},
+									{
+										"source": {
+											"name": "created",
+											"type": "DateTime"
+										},
+										"sink": {
+											"path": "$['created']"
+										}
+									},
+									{
+										"source": {
+											"name": "region",
+											"type": "String"
+										},
+										"sink": {
+											"path": "$['region']"
+										}
+									}
+								]
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "SQL_Event",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "Cosmos_Event",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					},
+					{
+						"name": "Copy Item",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "Azure Function - CleanCosmos",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"sink": {
+								"type": "CosmosDbSqlApiSink",
+								"writeBehavior": "insert"
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "ItemId",
+											"type": "Int32"
+										},
+										"sink": {
+											"path": "$['ItemId']"
+										}
+									},
+									{
+										"source": {
+											"name": "VoteCount",
+											"type": "Int32"
+										},
+										"sink": {
+											"path": "$['VoteCount']"
+										}
+									},
+									{
+										"source": {
+											"name": "ProductName",
+											"type": "String"
+										},
+										"sink": {
+											"path": "$['ProductName']"
+										}
+									},
+									{
+										"source": {
+											"name": "ImdbId",
+											"type": "Int32"
+										},
+										"sink": {
+											"path": "$['ImdbId']"
+										}
+									},
+									{
+										"source": {
+											"name": "Description",
+											"type": "String"
+										},
+										"sink": {
+											"path": "$['Description']"
+										}
+									},
+									{
+										"source": {
+											"name": "ImagePath",
+											"type": "String"
+										},
+										"sink": {
+											"path": "$['ImagePath']"
+										}
+									},
+									{
+										"source": {
+											"name": "ThumbnailPath",
+											"type": "String"
+										},
+										"sink": {
+											"path": "$['ThumbnailPath']"
+										}
+									},
+									{
+										"source": {
+											"name": "UnitPrice",
+											"type": "Decimal"
+										},
+										"sink": {
+											"path": "$['UnitPrice']"
+										}
+									},
+									{
+										"source": {
+											"name": "CategoryId",
+											"type": "Int32"
+										},
+										"sink": {
+											"path": "$['CategoryId']"
+										}
+									},
+									{
+										"source": {
+											"name": "Category",
+											"type": "String"
+										},
+										"sink": {
+											"path": "$['Category']"
+										}
+									},
+									{
+										"source": {
+											"name": "Popularity",
+											"type": "Decimal"
+										},
+										"sink": {
+											"path": "$['Popularity']"
+										}
+									},
+									{
+										"source": {
+											"name": "OriginalLanguage",
+											"type": "String"
+										},
+										"sink": {
+											"path": "$['OriginalLanguage']"
+										}
+									},
+									{
+										"source": {
+											"name": "ReleaseDate",
+											"type": "DateTime"
+										},
+										"sink": {
+											"path": "$['ReleaseDate']"
+										}
+									},
+									{
+										"source": {
+											"name": "VoteAverage",
+											"type": "Decimal"
+										},
+										"sink": {
+											"path": "$['VoteAverage']"
+										}
+									}
+								]
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "SQL_Item",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "Cosmos_Item",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					},
+					{
+						"name": "Copy ItemAggregate",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "Azure Function - CleanCosmos",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"sink": {
+								"type": "CosmosDbSqlApiSink",
+								"writeBehavior": "insert"
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "ItemId"
+										},
+										"sink": {
+											"path": "$['ItemId']"
+										}
+									},
+									{
+										"source": {
+											"name": "BuyCount"
+										},
+										"sink": {
+											"path": "$['BuyCount']"
+										}
+									},
+									{
+										"source": {
+											"name": "ViewDetailsCount"
+										},
+										"sink": {
+											"path": "$['ViewDetailsCount']"
+										}
+									},
+									{
+										"source": {
+											"name": "AddToCartCount"
+										},
+										"sink": {
+											"path": "$['AddToCartCount']"
+										}
+									},
+									{
+										"source": {
+											"name": "VoteCount"
+										},
+										"sink": {
+											"path": "$['VoteCount']"
+										}
+									}
+								]
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "SQL_ItemAggregate",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "Cosmos_ItemAggregate",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					},
+					{
+						"name": "Copy OrderDetails",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "Azure Function - CleanCosmos",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"sink": {
+								"type": "CosmosDbSqlApiSink",
+								"writeBehavior": "insert"
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "OrderDetailId",
+											"type": "Int32"
+										},
+										"sink": {
+											"path": "$['OrderDetailId']"
+										}
+									},
+									{
+										"source": {
+											"name": "OrderId",
+											"type": "Int32"
+										},
+										"sink": {
+											"path": "$['OrderId']"
+										}
+									},
+									{
+										"source": {
+											"name": "Email",
+											"type": "String"
+										},
+										"sink": {
+											"path": "$['Email']"
+										}
+									},
+									{
+										"source": {
+											"name": "ProductId",
+											"type": "Int32"
+										},
+										"sink": {
+											"path": "$['ProductId']"
+										}
+									},
+									{
+										"source": {
+											"name": "Quantity",
+											"type": "Int32"
+										},
+										"sink": {
+											"path": "$['Quantity']"
+										}
+									},
+									{
+										"source": {
+											"name": "UnitPrice",
+											"type": "Decimal"
+										},
+										"sink": {
+											"path": "$['UnitPrice']"
+										}
+									}
+								]
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "SQL_OrderDetails",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "Cosmos_OrderDetails",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					},
+					{
+						"name": "Copy Orders",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "Azure Function - CleanCosmos",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"sink": {
+								"type": "CosmosDbSqlApiSink",
+								"writeBehavior": "insert"
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "OrderId",
+											"type": "Int32"
+										},
+										"sink": {
+											"path": "$['OrderId']"
+										}
+									},
+									{
+										"source": {
+											"name": "OrderDate",
+											"type": "DateTime"
+										},
+										"sink": {
+											"path": "$['OrderDate']"
+										}
+									},
+									{
+										"source": {
+											"name": "FirstName",
+											"type": "String"
+										},
+										"sink": {
+											"path": "$['FirstName']"
+										}
+									},
+									{
+										"source": {
+											"name": "LastName",
+											"type": "String"
+										},
+										"sink": {
+											"path": "$['LastName']"
+										}
+									},
+									{
+										"source": {
+											"name": "Address",
+											"type": "String"
+										},
+										"sink": {
+											"path": "$['Address']"
+										}
+									},
+									{
+										"source": {
+											"name": "City",
+											"type": "String"
+										},
+										"sink": {
+											"path": "$['City']"
+										}
+									},
+									{
+										"source": {
+											"name": "State",
+											"type": "String"
+										},
+										"sink": {
+											"path": "$['State']"
+										}
+									},
+									{
+										"source": {
+											"name": "PostalCode",
+											"type": "String"
+										},
+										"sink": {
+											"path": "$['PostalCode']"
+										}
+									},
+									{
+										"source": {
+											"name": "Country",
+											"type": "String"
+										},
+										"sink": {
+											"path": "$['Country']"
+										}
+									},
+									{
+										"source": {
+											"name": "Phone",
+											"type": "String"
+										},
+										"sink": {
+											"path": "$['Phone']"
+										}
+									},
+									{
+										"source": {
+											"name": "SMSOptIn",
+											"type": "Boolean"
+										},
+										"sink": {
+											"path": "$['SMSOptIn']"
+										}
+									},
+									{
+										"source": {
+											"name": "SMSStatus",
+											"type": "String"
+										},
+										"sink": {
+											"path": "$['SMSStatus']"
+										}
+									},
+									{
+										"source": {
+											"name": "Email",
+											"type": "String"
+										},
+										"sink": {
+											"path": "$['Email']"
+										}
+									},
+									{
+										"source": {
+											"name": "ReceiptUrl",
+											"type": "String"
+										},
+										"sink": {
+											"path": "$['ReceiptUrl']"
+										}
+									},
+									{
+										"source": {
+											"name": "Total",
+											"type": "Decimal"
+										},
+										"sink": {
+											"path": "$['Total']"
+										}
+									},
+									{
+										"source": {
+											"name": "PaymentTransactionId",
+											"type": "String"
+										},
+										"sink": {
+											"path": "$['PaymentTransactionId']"
+										}
+									},
+									{
+										"source": {
+											"name": "HasBeenShipped",
+											"type": "Boolean"
+										},
+										"sink": {
+											"path": "$['HasBeenShipped']"
+										}
+									}
+								]
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "SQL_Orders",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "Cosmos_Orders",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					},
+					{
+						"name": "Copy User",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "Azure Function - CleanCosmos",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"sink": {
+								"type": "CosmosDbSqlApiSink",
+								"writeBehavior": "insert"
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "UserId",
+											"type": "Int32"
+										},
+										"sink": {
+											"path": "$['UserId']"
+										}
+									},
+									{
+										"source": {
+											"name": "Name",
+											"type": "String"
+										},
+										"sink": {
+											"path": "$['Name']"
+										}
+									},
+									{
+										"source": {
+											"name": "Email",
+											"type": "String"
+										},
+										"sink": {
+											"path": "$['Email']"
+										}
+									},
+									{
+										"source": {
+											"name": "CategoryId",
+											"type": "Int32"
+										},
+										"sink": {
+											"path": "$['CategoryId']"
+										}
+									},
+									{
+										"source": {
+											"name": "Personality",
+											"type": "String"
+										},
+										"sink": {
+											"path": "$['Personailty']"
+										}
+									}
+								]
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "SQL_User",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "Cosmos_User",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					},
+					{
+						"name": "Azure Function - CleanCosmos",
+						"type": "AzureFunctionActivity",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"functionName": "CleanCosmos",
+							"method": "POST",
+							"headers": {
+								"Content-Type": "application/json"
+							},
+							"body": "[[\n    {\n        'name': 'Cartitem',\n        'partitionKey': 'CartId'\n    },\n    {\n        'name': 'Category',\n        'partitionKey': 'CategoryId'\n    },\n    {\n        'name': 'Event',\n        'partitionKey': 'id'\n    },\n    {\n        'name': 'Item',\n        'partitionKey': 'ItemId'\n    },\n    {\n        'name': 'ItemAggregate',\n        'partitionKey': 'id'\n    },\n    {\n        'name': 'OrderDetails',\n        'partitionKey': 'OrderId'\n    },\n    {\n        'name': 'Orders',\n        'partitionKey': 'OrderId'\n    },\n    {\n        'name': 'User',\n        'partitionKey': 'UserId'\n    }\n]"
+						},
+						"linkedServiceName": {
+							"referenceName": "Contoso Video Azure Function",
+							"type": "LinkedServiceReference"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"annotations": [],
+				"lastPublishTime": "2022-06-06T15:04:46Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/SQL_Cartitem')]",
+				"[concat(variables('factoryId'), '/datasets/Cosmos_CartItem')]",
+				"[concat(variables('factoryId'), '/datasets/SQL_Category')]",
+				"[concat(variables('factoryId'), '/datasets/Cosmos_Category')]",
+				"[concat(variables('factoryId'), '/datasets/SQL_Event')]",
+				"[concat(variables('factoryId'), '/datasets/Cosmos_Event')]",
+				"[concat(variables('factoryId'), '/datasets/SQL_Item')]",
+				"[concat(variables('factoryId'), '/datasets/Cosmos_Item')]",
+				"[concat(variables('factoryId'), '/datasets/SQL_ItemAggregate')]",
+				"[concat(variables('factoryId'), '/datasets/Cosmos_ItemAggregate')]",
+				"[concat(variables('factoryId'), '/datasets/SQL_OrderDetails')]",
+				"[concat(variables('factoryId'), '/datasets/Cosmos_OrderDetails')]",
+				"[concat(variables('factoryId'), '/datasets/SQL_Orders')]",
+				"[concat(variables('factoryId'), '/datasets/Cosmos_Orders')]",
+				"[concat(variables('factoryId'), '/datasets/SQL_User')]",
+				"[concat(variables('factoryId'), '/datasets/Cosmos_User')]",
+				"[concat(variables('factoryId'), '/linkedServices/Contoso Video Azure Function')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Cosmos_CartItem')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "CosmosDb_Contoso_Video",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "CosmosDbSqlApiCollection",
+				"schema": {},
+				"typeProperties": {
+					"collectionName": "Cartitem"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/CosmosDb_Contoso_Video')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Cosmos_Category')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "CosmosDb_Contoso_Video",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "CosmosDbSqlApiCollection",
+				"schema": {
+					"type": "object",
+					"properties": {
+						"CategoryId": {
+							"type": "integer"
+						},
+						"CategoryName": {
+							"type": "string"
+						},
+						"Description": {
+							"type": "null"
+						},
+						"Products": {
+							"type": "null"
+						}
+					}
+				},
+				"typeProperties": {
+					"collectionName": "Category"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/CosmosDb_Contoso_Video')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Cosmos_Event')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "CosmosDb_Contoso_Video",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "CosmosDbSqlApiCollection",
+				"schema": {
+					"type": "object",
+					"properties": {
+						"event": {
+							"type": "string"
+						},
+						"userId": {
+							"type": "integer"
+						},
+						"itemId": {
+							"type": "null"
+						},
+						"orderId": {
+							"type": "null"
+						},
+						"contentId": {
+							"type": "integer"
+						},
+						"sessionId": {
+							"type": "string"
+						},
+						"created": {
+							"type": "string"
+						},
+						"region": {
+							"type": "null"
+						}
+					}
+				},
+				"typeProperties": {
+					"collectionName": "Event"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/CosmosDb_Contoso_Video')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Cosmos_Item')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "CosmosDb_Contoso_Video",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "CosmosDbSqlApiCollection",
+				"schema": {
+					"type": "object",
+					"properties": {
+						"ItemId": {
+							"type": "integer"
+						},
+						"VoteCount": {
+							"type": "integer"
+						},
+						"ProductName": {
+							"type": "string"
+						},
+						"ImdbId": {
+							"type": "integer"
+						},
+						"Description": {
+							"type": "string"
+						},
+						"ImagePath": {
+							"type": "string"
+						},
+						"ThumbnailPath": {
+							"type": "null"
+						},
+						"UnitPrice": {
+							"type": "number"
+						},
+						"CategoryId": {
+							"type": "integer"
+						},
+						"Category": {
+							"type": "null"
+						},
+						"Popularity": {
+							"type": "number"
+						},
+						"OriginalLanguage": {
+							"type": "string"
+						},
+						"ReleaseDate": {
+							"type": "string"
+						},
+						"VoteAverage": {
+							"type": "number"
+						}
+					}
+				},
+				"typeProperties": {
+					"collectionName": "Item"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/CosmosDb_Contoso_Video')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Cosmos_ItemAggregate')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "CosmosDb_Contoso_Video",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "CosmosDbSqlApiCollection",
+				"schema": {
+					"type": "object",
+					"properties": {
+						"ItemId": {
+							"type": "integer"
+						},
+						"BuyCount": {
+							"type": "integer"
+						},
+						"ViewDetailsCount": {
+							"type": "integer"
+						},
+						"AddToCartCount": {
+							"type": "integer"
+						},
+						"VoteCount": {
+							"type": "integer"
+						}
+					}
+				},
+				"typeProperties": {
+					"collectionName": "ItemAggregate"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/CosmosDb_Contoso_Video')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Cosmos_OrderDetails')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "CosmosDb_Contoso_Video",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "CosmosDbSqlApiCollection",
+				"schema": {},
+				"typeProperties": {
+					"collectionName": "OrderDetails"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/CosmosDb_Contoso_Video')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Cosmos_Orders')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "CosmosDb_Contoso_Video",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "CosmosDbSqlApiCollection",
+				"schema": {
+					"type": "object",
+					"properties": {
+						"OrderId": {
+							"type": "integer"
+						},
+						"OrderDate": {
+							"type": "string"
+						},
+						"FirstName": {
+							"type": "string"
+						},
+						"LastName": {
+							"type": "string"
+						},
+						"Address": {
+							"type": "string"
+						},
+						"City": {
+							"type": "string"
+						},
+						"State": {
+							"type": "string"
+						},
+						"PostalCode": {
+							"type": "string"
+						},
+						"Country": {
+							"type": "string"
+						},
+						"Phone": {
+							"type": "string"
+						},
+						"SMSOptIn": {
+							"type": "boolean"
+						},
+						"SMSStatus": {
+							"type": "null"
+						},
+						"Email": {
+							"type": "string"
+						},
+						"ReceiptUrl": {
+							"type": "null"
+						},
+						"Total": {
+							"type": "number"
+						},
+						"PaymentTransactionId": {
+							"type": "string"
+						},
+						"HasBeenShipped": {
+							"type": "boolean"
+						}
+					}
+				},
+				"typeProperties": {
+					"collectionName": "Orders"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/CosmosDb_Contoso_Video')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Cosmos_User')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "CosmosDb_Contoso_Video",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "CosmosDbSqlApiCollection",
+				"schema": {
+					"type": "object",
+					"properties": {
+						"UserId": {
+							"type": "integer"
+						},
+						"Name": {
+							"type": "string"
+						},
+						"Email": {
+							"type": "string"
+						},
+						"CategoryId": {
+							"type": "integer"
+						},
+						"Personailty": {
+							"type": "null"
+						}
+					}
+				},
+				"typeProperties": {
+					"collectionName": "User"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/CosmosDb_Contoso_Video')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SQL_Cartitem')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzSQL_Contoso_Video",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "CartItemId",
+						"type": "varchar"
+					},
+					{
+						"name": "CartId",
+						"type": "varchar"
+					},
+					{
+						"name": "ItemId",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Quantity",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "DateCreated",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "Cartitem"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzSQL_Contoso_Video')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SQL_Category')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzSQL_Contoso_Video",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "CategoryId",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "CategoryName",
+						"type": "varchar"
+					},
+					{
+						"name": "Description",
+						"type": "varchar"
+					},
+					{
+						"name": "Products",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "Category"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzSQL_Contoso_Video')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SQL_Event')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzSQL_Contoso_Video",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "CategoryId",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "CategoryName",
+						"type": "varchar"
+					},
+					{
+						"name": "Description",
+						"type": "varchar"
+					},
+					{
+						"name": "Products",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "Event"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzSQL_Contoso_Video')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SQL_Item')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzSQL_Contoso_Video",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "CategoryId",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "CategoryName",
+						"type": "varchar"
+					},
+					{
+						"name": "Description",
+						"type": "varchar"
+					},
+					{
+						"name": "Products",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "Item"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzSQL_Contoso_Video')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SQL_ItemAggregate')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzSQL_Contoso_Video",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "CategoryId",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "CategoryName",
+						"type": "varchar"
+					},
+					{
+						"name": "Description",
+						"type": "varchar"
+					},
+					{
+						"name": "Products",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "ItemAggregate"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzSQL_Contoso_Video')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SQL_OrderDetails')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzSQL_Contoso_Video",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "CategoryId",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "CategoryName",
+						"type": "varchar"
+					},
+					{
+						"name": "Description",
+						"type": "varchar"
+					},
+					{
+						"name": "Products",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "OrderDetails"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzSQL_Contoso_Video')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SQL_Orders')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzSQL_Contoso_Video",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "CategoryId",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "CategoryName",
+						"type": "varchar"
+					},
+					{
+						"name": "Description",
+						"type": "varchar"
+					},
+					{
+						"name": "Products",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "Orders"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzSQL_Contoso_Video')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SQL_User')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzSQL_Contoso_Video",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "CategoryId",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "CategoryName",
+						"type": "varchar"
+					},
+					{
+						"name": "Description",
+						"type": "varchar"
+					},
+					{
+						"name": "Products",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "User"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzSQL_Contoso_Video')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzSQL_Contoso_Video')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"connectionString": "[parameters('AzSQL_Contoso_Video_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Contoso Video Azure Function')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureFunction",
+				"typeProperties": {
+					"functionAppUrl": "[parameters('Contoso Video Azure Function_properties_typeProperties_functionAppUrl')]",
+					"functionKey": {
+						"type": "SecureString",
+						"value": "[parameters('Contoso Video Azure Function_functionKey')]"
+					},
+					"authentication": "Anonymous"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/CosmosDb_Contoso_Video')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "CosmosDb",
+				"typeProperties": {
+					"connectionString": "[parameters('CosmosDb_Contoso_Video_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		}
+	]
+}
