@@ -1,0 +1,110 @@
+{
+	"name": "dataflow1",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "Cosmos_Raw_Item",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				},
+				{
+					"dataset": {
+						"referenceName": "Cosmos_Raw_ItemAggregate",
+						"type": "DatasetReference"
+					},
+					"name": "source2"
+				},
+				{
+					"dataset": {
+						"referenceName": "Cosmos_Raw_Category",
+						"type": "DatasetReference"
+					},
+					"name": "source3"
+				}
+			],
+			"sinks": [],
+			"transformations": [
+				{
+					"name": "join1"
+				},
+				{
+					"name": "select1"
+				},
+				{
+					"name": "join2"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          ItemId as integer,",
+				"          VoteCount as integer,",
+				"          ProductName as string,",
+				"          ImdbId as integer,",
+				"          Description as string,",
+				"          ImagePath as string,",
+				"          ThumbnailPath as string,",
+				"          UnitPrice as double,",
+				"          CategoryId as integer,",
+				"          Category as string,",
+				"          Popularity as double,",
+				"          OriginalLanguage as string,",
+				"          ReleaseDate as string,",
+				"          VoteAverage as double",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'document') ~> source1",
+				"source(output(",
+				"          ItemId as integer,",
+				"          BuyCount as integer,",
+				"          ViewDetailsCount as integer,",
+				"          AddToCartCount as integer,",
+				"          VoteCount as integer",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'document') ~> source2",
+				"source(output(",
+				"          CategoryId as integer,",
+				"          CategoryName as string,",
+				"          Description as string,",
+				"          Products as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'document') ~> source3",
+				"source1, source2 join(source1@ItemId == source2@ItemId,",
+				"     joinType:'left',",
+				"     broadcast: 'auto')~> join1",
+				"join2 select(mapColumn(",
+				"          ItemId = source1@ItemId,",
+				"          ProductName,",
+				"          ImdbId,",
+				"          Description = source1@Description,",
+				"          ImagePath,",
+				"          ThumbnailPath,",
+				"          UnitPrice,",
+				"          CategoryId = source1@CategoryId,",
+				"          Category,",
+				"          Popularity,",
+				"          OriginalLanguage,",
+				"          ReleaseDate,",
+				"          VoteAverage,",
+				"          BuyCount,",
+				"          ViewDetailsCount,",
+				"          AddToCartCount,",
+				"          VoteCount = source2@VoteCount",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"join1, source3 join(source1@CategoryId == source3@CategoryId,",
+				"     joinType:'left',",
+				"     broadcast: 'auto')~> join2"
+			]
+		}
+	}
+}
