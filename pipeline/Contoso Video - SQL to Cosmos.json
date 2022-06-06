@@ -91,7 +91,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "Cosmos_CartItem",
+						"referenceName": "Cosmos_Raw_CartItem",
 						"type": "DatasetReference"
 					}
 				]
@@ -176,7 +176,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "Cosmos_Category",
+						"referenceName": "Cosmos_Raw_Category",
 						"type": "DatasetReference"
 					}
 				]
@@ -306,7 +306,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "Cosmos_Event",
+						"referenceName": "Cosmos_Raw_Event",
 						"type": "DatasetReference"
 					}
 				]
@@ -481,7 +481,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "Cosmos_Item",
+						"referenceName": "Cosmos_Raw_Item",
 						"type": "DatasetReference"
 					}
 				]
@@ -570,7 +570,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "Cosmos_ItemAggregate",
+						"referenceName": "Cosmos_Raw_ItemAggregate",
 						"type": "DatasetReference"
 					}
 				]
@@ -673,7 +673,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "Cosmos_OrderDetails",
+						"referenceName": "Cosmos_Raw_OrderDetails",
 						"type": "DatasetReference"
 					}
 				]
@@ -875,7 +875,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "Cosmos_Orders",
+						"referenceName": "Cosmos_Raw_Orders",
 						"type": "DatasetReference"
 					}
 				]
@@ -969,7 +969,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "Cosmos_User",
+						"referenceName": "Cosmos_Raw_User",
 						"type": "DatasetReference"
 					}
 				]

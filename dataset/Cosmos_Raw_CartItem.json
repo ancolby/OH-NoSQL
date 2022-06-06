@@ -1,5 +1,5 @@
 {
-	"name": "Cosmos_CartItem",
+	"name": "Cosmos_Raw_CartItem",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "CosmosDb_Contoso_Video_Raw",
