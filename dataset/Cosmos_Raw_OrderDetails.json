@@ -1,8 +1,8 @@
 {
-	"name": "Cosmos_OrderDetails",
+	"name": "Cosmos_Raw_OrderDetails",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "CosmosDb_Contoso_Video",
+			"referenceName": "CosmosDb_Contoso_Video_Raw",
 			"type": "LinkedServiceReference"
 		},
 		"annotations": [],
