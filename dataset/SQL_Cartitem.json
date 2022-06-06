@@ -1,0 +1,42 @@
+{
+	"name": "SQL_Cartitem",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzSQL_Contoso_Video",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "CartItemId",
+				"type": "varchar"
+			},
+			{
+				"name": "CartId",
+				"type": "varchar"
+			},
+			{
+				"name": "ItemId",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "Quantity",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "DateCreated",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "Cartitem"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

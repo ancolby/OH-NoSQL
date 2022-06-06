@@ -1,0 +1,44 @@
+{
+	"name": "Cosmos_Event",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "CosmosDb_Contoso_Video",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "CosmosDbSqlApiCollection",
+		"schema": {
+			"type": "object",
+			"properties": {
+				"event": {
+					"type": "string"
+				},
+				"userId": {
+					"type": "integer"
+				},
+				"itemId": {
+					"type": "null"
+				},
+				"orderId": {
+					"type": "null"
+				},
+				"contentId": {
+					"type": "integer"
+				},
+				"sessionId": {
+					"type": "string"
+				},
+				"created": {
+					"type": "string"
+				},
+				"region": {
+					"type": "null"
+				}
+			}
+		},
+		"typeProperties": {
+			"collectionName": "Event"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

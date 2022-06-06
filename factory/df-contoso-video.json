@@ -1,0 +1,9 @@
+{
+	"name": "df-contoso-video",
+	"location": "ukwest",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "17815543-3f28-40a4-b40d-2bac591aa20f",
+		"tenantId": "72f988bf-86f1-41af-91ab-2d7cd011db47"
+	}
+}

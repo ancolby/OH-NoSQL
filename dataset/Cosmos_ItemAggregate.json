@@ -1,0 +1,35 @@
+{
+	"name": "Cosmos_ItemAggregate",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "CosmosDb_Contoso_Video",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "CosmosDbSqlApiCollection",
+		"schema": {
+			"type": "object",
+			"properties": {
+				"ItemId": {
+					"type": "integer"
+				},
+				"BuyCount": {
+					"type": "integer"
+				},
+				"ViewDetailsCount": {
+					"type": "integer"
+				},
+				"AddToCartCount": {
+					"type": "integer"
+				},
+				"VoteCount": {
+					"type": "integer"
+				}
+			}
+		},
+		"typeProperties": {
+			"collectionName": "ItemAggregate"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

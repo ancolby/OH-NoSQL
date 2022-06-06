@@ -1,0 +1,32 @@
+{
+	"name": "Cosmos_Category",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "CosmosDb_Contoso_Video",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "CosmosDbSqlApiCollection",
+		"schema": {
+			"type": "object",
+			"properties": {
+				"CategoryId": {
+					"type": "integer"
+				},
+				"CategoryName": {
+					"type": "string"
+				},
+				"Description": {
+					"type": "null"
+				},
+				"Products": {
+					"type": "null"
+				}
+			}
+		},
+		"typeProperties": {
+			"collectionName": "Category"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
