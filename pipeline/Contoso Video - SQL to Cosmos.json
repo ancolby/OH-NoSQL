@@ -508,7 +508,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
-						"sqlReaderQuery": "SELECT TRIM([id]) as id\n      ,[ItemId]\n      ,[BuyCount]\n      ,[ViewDetailsCount]\n      ,[AddToCartCount]\n      ,[VoteCount]\n  FROM [dbo].[ItemAggregate]",
+						"sqlReaderQuery": "SELECT LOWER([id]) as id\n      ,[ItemId]\n      ,[BuyCount]\n      ,[ViewDetailsCount]\n      ,[AddToCartCount]\n      ,[VoteCount]\n  FROM [dbo].[ItemAggregate]",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
@@ -522,8 +522,7 @@
 						"mappings": [
 							{
 								"source": {
-									"name": "id",
-									"type": "String"
+									"name": "id"
 								},
 								"sink": {
 									"path": "$['id']"
@@ -531,8 +530,7 @@
 							},
 							{
 								"source": {
-									"name": "ItemId",
-									"type": "Int32"
+									"name": "ItemId"
 								},
 								"sink": {
 									"path": "$['ItemId']"
@@ -540,8 +538,7 @@
 							},
 							{
 								"source": {
-									"name": "BuyCount",
-									"type": "Int32"
+									"name": "BuyCount"
 								},
 								"sink": {
 									"path": "$['BuyCount']"
@@ -549,8 +546,7 @@
 							},
 							{
 								"source": {
-									"name": "ViewDetailsCount",
-									"type": "Int32"
+									"name": "ViewDetailsCount"
 								},
 								"sink": {
 									"path": "$['ViewDetailsCount']"
@@ -558,8 +554,7 @@
 							},
 							{
 								"source": {
-									"name": "AddToCartCount",
-									"type": "Int32"
+									"name": "AddToCartCount"
 								},
 								"sink": {
 									"path": "$['AddToCartCount']"
@@ -567,8 +562,7 @@
 							},
 							{
 								"source": {
-									"name": "VoteCount",
-									"type": "Int32"
+									"name": "VoteCount"
 								},
 								"sink": {
 									"path": "$['VoteCount']"
