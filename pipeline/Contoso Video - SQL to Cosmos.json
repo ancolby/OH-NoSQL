@@ -992,7 +992,7 @@
 					"headers": {
 						"Content-Type": "application/json"
 					},
-					"body": "[\n    {\n        'name': 'Cartitem',\n        'partitionKey': 'CartId'\n    },\n    {\n        'name': 'Category',\n        'partitionKey': 'CategoryId'\n    },\n    {\n        'name': 'Event',\n        'partitionKey': 'id'\n    },\n    {\n        'name': 'Item',\n        'partitionKey': 'ItemId'\n    },\n    {\n        'name': 'ItemAggregate',\n        'partitionKey': 'id'\n    },\n    {\n        'name': 'OrderDetails',\n        'partitionKey': 'OrderId'\n    },\n    {\n        'name': 'Orders',\n        'partitionKey': 'OrderId'\n    },\n    {\n        'name': 'User',\n        'partitionKey': 'UserId'\n    }\n]"
+					"body": "[\n    {\n        'name': 'Cartitem',\n        'partitionKey': 'CartId'\n    },\n    {\n        'name': 'Category',\n        'partitionKey': 'CategoryId'\n    },\n    {\n        'name': 'Event',\n        'partitionKey': 'id'\n    },\n    {\n        'name': 'Item',\n        'partitionKey': 'ItemId'\n    },\n    {\n        'name': 'ItemAggregate',\n        'partitionKey': 'ItemId'\n    },\n    {\n        'name': 'OrderDetails',\n        'partitionKey': 'OrderId'\n    },\n    {\n        'name': 'Orders',\n        'partitionKey': 'OrderId'\n    },\n    {\n        'name': 'User',\n        'partitionKey': 'UserId'\n    }\n]"
 				},
 				"linkedServiceName": {
 					"referenceName": "Contoso Video Azure Function",
