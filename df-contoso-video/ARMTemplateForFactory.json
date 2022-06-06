@@ -19,6 +19,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'CosmosDb_Contoso_Video'"
 		},
+		"CosmosDb_Contoso_Video_Raw_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'CosmosDb_Contoso_Video_Raw'"
+		},
 		"Contoso Video Azure Function_properties_typeProperties_functionAppUrl": {
 			"type": "string",
 			"defaultValue": "https://fn-contoso-video.azurewebsites.net"
@@ -124,7 +128,7 @@
 						],
 						"outputs": [
 							{
-								"referenceName": "Cosmos_CartItem",
+								"referenceName": "Cosmos_Raw_CartItem",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
@@ -211,7 +215,7 @@
 						],
 						"outputs": [
 							{
-								"referenceName": "Cosmos_Category",
+								"referenceName": "Cosmos_Raw_Category",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
@@ -343,7 +347,7 @@
 						],
 						"outputs": [
 							{
-								"referenceName": "Cosmos_Event",
+								"referenceName": "Cosmos_Raw_Event",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
@@ -520,7 +524,7 @@
 						],
 						"outputs": [
 							{
-								"referenceName": "Cosmos_Item",
+								"referenceName": "Cosmos_Raw_Item",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
@@ -611,7 +615,7 @@
 						],
 						"outputs": [
 							{
-								"referenceName": "Cosmos_ItemAggregate",
+								"referenceName": "Cosmos_Raw_ItemAggregate",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
@@ -716,7 +720,7 @@
 						],
 						"outputs": [
 							{
-								"referenceName": "Cosmos_OrderDetails",
+								"referenceName": "Cosmos_Raw_OrderDetails",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
@@ -920,7 +924,7 @@
 						],
 						"outputs": [
 							{
-								"referenceName": "Cosmos_Orders",
+								"referenceName": "Cosmos_Raw_Orders",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
@@ -1016,7 +1020,7 @@
 						],
 						"outputs": [
 							{
-								"referenceName": "Cosmos_User",
+								"referenceName": "Cosmos_Raw_User",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
@@ -1040,7 +1044,7 @@
 							"headers": {
 								"Content-Type": "application/json"
 							},
-							"body": "[[\n    {\n        'name': 'Cartitem',\n        'partitionKey': 'CartId'\n    },\n    {\n        'name': 'Category',\n        'partitionKey': 'CategoryId'\n    },\n    {\n        'name': 'Event',\n        'partitionKey': 'id'\n    },\n    {\n        'name': 'Item',\n        'partitionKey': 'ItemId'\n    },\n    {\n        'name': 'ItemAggregate',\n        'partitionKey': 'id'\n    },\n    {\n        'name': 'OrderDetails',\n        'partitionKey': 'OrderId'\n    },\n    {\n        'name': 'Orders',\n        'partitionKey': 'OrderId'\n    },\n    {\n        'name': 'User',\n        'partitionKey': 'UserId'\n    }\n]"
+							"body": "[[\n    {\n        'name': 'Cartitem',\n        'partitionKey': 'CartId'\n    },\n    {\n        'name': 'Category',\n        'partitionKey': 'CategoryId'\n    },\n    {\n        'name': 'Event',\n        'partitionKey': 'id'\n    },\n    {\n        'name': 'Item',\n        'partitionKey': 'ItemId'\n    },\n    {\n        'name': 'ItemAggregate',\n        'partitionKey': 'ItemId'\n    },\n    {\n        'name': 'OrderDetails',\n        'partitionKey': 'OrderId'\n    },\n    {\n        'name': 'Orders',\n        'partitionKey': 'OrderId'\n    },\n    {\n        'name': 'User',\n        'partitionKey': 'UserId'\n    }\n]"
 						},
 						"linkedServiceName": {
 							"referenceName": "Contoso Video Azure Function",
@@ -1057,31 +1061,31 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/SQL_Cartitem')]",
-				"[concat(variables('factoryId'), '/datasets/Cosmos_CartItem')]",
+				"[concat(variables('factoryId'), '/datasets/Cosmos_Raw_CartItem')]",
 				"[concat(variables('factoryId'), '/datasets/SQL_Category')]",
-				"[concat(variables('factoryId'), '/datasets/Cosmos_Category')]",
+				"[concat(variables('factoryId'), '/datasets/Cosmos_Raw_Category')]",
 				"[concat(variables('factoryId'), '/datasets/SQL_Event')]",
-				"[concat(variables('factoryId'), '/datasets/Cosmos_Event')]",
+				"[concat(variables('factoryId'), '/datasets/Cosmos_Raw_Event')]",
 				"[concat(variables('factoryId'), '/datasets/SQL_Item')]",
-				"[concat(variables('factoryId'), '/datasets/Cosmos_Item')]",
+				"[concat(variables('factoryId'), '/datasets/Cosmos_Raw_Item')]",
 				"[concat(variables('factoryId'), '/datasets/SQL_ItemAggregate')]",
-				"[concat(variables('factoryId'), '/datasets/Cosmos_ItemAggregate')]",
+				"[concat(variables('factoryId'), '/datasets/Cosmos_Raw_ItemAggregate')]",
 				"[concat(variables('factoryId'), '/datasets/SQL_OrderDetails')]",
-				"[concat(variables('factoryId'), '/datasets/Cosmos_OrderDetails')]",
+				"[concat(variables('factoryId'), '/datasets/Cosmos_Raw_OrderDetails')]",
 				"[concat(variables('factoryId'), '/datasets/SQL_Orders')]",
-				"[concat(variables('factoryId'), '/datasets/Cosmos_Orders')]",
+				"[concat(variables('factoryId'), '/datasets/Cosmos_Raw_Orders')]",
 				"[concat(variables('factoryId'), '/datasets/SQL_User')]",
-				"[concat(variables('factoryId'), '/datasets/Cosmos_User')]",
+				"[concat(variables('factoryId'), '/datasets/Cosmos_Raw_User')]",
 				"[concat(variables('factoryId'), '/linkedServices/Contoso Video Azure Function')]"
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/Cosmos_CartItem')]",
+			"name": "[concat(parameters('factoryName'), '/Cosmos_Raw_CartItem')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "CosmosDb_Contoso_Video",
+					"referenceName": "CosmosDb_Contoso_Video_Raw",
 					"type": "LinkedServiceReference"
 				},
 				"annotations": [],
@@ -1092,16 +1096,16 @@
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/CosmosDb_Contoso_Video')]"
+				"[concat(variables('factoryId'), '/linkedServices/CosmosDb_Contoso_Video_Raw')]"
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/Cosmos_Category')]",
+			"name": "[concat(parameters('factoryName'), '/Cosmos_Raw_Category')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "CosmosDb_Contoso_Video",
+					"referenceName": "CosmosDb_Contoso_Video_Raw",
 					"type": "LinkedServiceReference"
 				},
 				"annotations": [],
@@ -1128,16 +1132,16 @@
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/CosmosDb_Contoso_Video')]"
+				"[concat(variables('factoryId'), '/linkedServices/CosmosDb_Contoso_Video_Raw')]"
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/Cosmos_Event')]",
+			"name": "[concat(parameters('factoryName'), '/Cosmos_Raw_Event')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "CosmosDb_Contoso_Video",
+					"referenceName": "CosmosDb_Contoso_Video_Raw",
 					"type": "LinkedServiceReference"
 				},
 				"annotations": [],
@@ -1176,16 +1180,16 @@
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/CosmosDb_Contoso_Video')]"
+				"[concat(variables('factoryId'), '/linkedServices/CosmosDb_Contoso_Video_Raw')]"
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/Cosmos_Item')]",
+			"name": "[concat(parameters('factoryName'), '/Cosmos_Raw_Item')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "CosmosDb_Contoso_Video",
+					"referenceName": "CosmosDb_Contoso_Video_Raw",
 					"type": "LinkedServiceReference"
 				},
 				"annotations": [],
@@ -1242,16 +1246,16 @@
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/CosmosDb_Contoso_Video')]"
+				"[concat(variables('factoryId'), '/linkedServices/CosmosDb_Contoso_Video_Raw')]"
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/Cosmos_ItemAggregate')]",
+			"name": "[concat(parameters('factoryName'), '/Cosmos_Raw_ItemAggregate')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "CosmosDb_Contoso_Video",
+					"referenceName": "CosmosDb_Contoso_Video_Raw",
 					"type": "LinkedServiceReference"
 				},
 				"annotations": [],
@@ -1281,16 +1285,16 @@
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/CosmosDb_Contoso_Video')]"
+				"[concat(variables('factoryId'), '/linkedServices/CosmosDb_Contoso_Video_Raw')]"
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/Cosmos_OrderDetails')]",
+			"name": "[concat(parameters('factoryName'), '/Cosmos_Raw_OrderDetails')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "CosmosDb_Contoso_Video",
+					"referenceName": "CosmosDb_Contoso_Video_Raw",
 					"type": "LinkedServiceReference"
 				},
 				"annotations": [],
@@ -1301,16 +1305,16 @@
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/CosmosDb_Contoso_Video')]"
+				"[concat(variables('factoryId'), '/linkedServices/CosmosDb_Contoso_Video_Raw')]"
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/Cosmos_Orders')]",
+			"name": "[concat(parameters('factoryName'), '/Cosmos_Raw_Orders')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "CosmosDb_Contoso_Video",
+					"referenceName": "CosmosDb_Contoso_Video_Raw",
 					"type": "LinkedServiceReference"
 				},
 				"annotations": [],
@@ -1376,16 +1380,16 @@
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/CosmosDb_Contoso_Video')]"
+				"[concat(variables('factoryId'), '/linkedServices/CosmosDb_Contoso_Video_Raw')]"
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/Cosmos_User')]",
+			"name": "[concat(parameters('factoryName'), '/Cosmos_Raw_User')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "CosmosDb_Contoso_Video",
+					"referenceName": "CosmosDb_Contoso_Video_Raw",
 					"type": "LinkedServiceReference"
 				},
 				"annotations": [],
@@ -1415,7 +1419,7 @@
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/CosmosDb_Contoso_Video')]"
+				"[concat(variables('factoryId'), '/linkedServices/CosmosDb_Contoso_Video_Raw')]"
 			]
 		},
 		{
@@ -1780,6 +1784,309 @@
 				}
 			},
 			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/CosmosDb_Contoso_Video_Raw')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "CosmosDb",
+				"typeProperties": {
+					"connectionString": "[parameters('CosmosDb_Contoso_Video_Raw_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Cosmos_Item')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "CosmosDb_Contoso_Video",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "CosmosDbSqlApiCollection",
+				"schema": {
+					"type": "object",
+					"properties": {
+						"ItemId": {
+							"type": "integer"
+						},
+						"VoteCount": {
+							"type": "integer"
+						},
+						"ProductName": {
+							"type": "string"
+						},
+						"ImdbId": {
+							"type": "integer"
+						},
+						"Description": {
+							"type": "string"
+						},
+						"ImagePath": {
+							"type": "string"
+						},
+						"ThumbnailPath": {
+							"type": "null"
+						},
+						"UnitPrice": {
+							"type": "number"
+						},
+						"CategoryId": {
+							"type": "integer"
+						},
+						"Category": {
+							"type": "null"
+						},
+						"Popularity": {
+							"type": "number"
+						},
+						"OriginalLanguage": {
+							"type": "string"
+						},
+						"ReleaseDate": {
+							"type": "string"
+						},
+						"VoteAverage": {
+							"type": "number"
+						}
+					}
+				},
+				"typeProperties": {
+					"collectionName": "Item"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/CosmosDb_Contoso_Video')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Optimise Database')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Optimise Items",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "1.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "OptimiseItems",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"CosmosRawItem": {},
+									"CosmosRawItemAggregate": {},
+									"CosmosRawCategory": {},
+									"WriteToCosmosItems": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/OptimiseItems')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/OptimiseItems')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "Cosmos_Raw_Item",
+								"type": "DatasetReference"
+							},
+							"name": "CosmosRawItem"
+						},
+						{
+							"dataset": {
+								"referenceName": "Cosmos_Raw_ItemAggregate",
+								"type": "DatasetReference"
+							},
+							"name": "CosmosRawItemAggregate"
+						},
+						{
+							"dataset": {
+								"referenceName": "Cosmos_Raw_Category",
+								"type": "DatasetReference"
+							},
+							"name": "CosmosRawCategory"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "Cosmos_Item",
+								"type": "DatasetReference"
+							},
+							"name": "WriteToCosmosItems"
+						}
+					],
+					"transformations": [
+						{
+							"name": "JoinItemAggregate"
+						},
+						{
+							"name": "SelectItems"
+						},
+						{
+							"name": "JoinCategory"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          ItemId as integer,",
+						"          VoteCount as integer,",
+						"          ProductName as string,",
+						"          ImdbId as integer,",
+						"          Description as string,",
+						"          ImagePath as string,",
+						"          ThumbnailPath as string,",
+						"          UnitPrice as double,",
+						"          CategoryId as integer,",
+						"          Category as string,",
+						"          Popularity as double,",
+						"          OriginalLanguage as string,",
+						"          ReleaseDate as string,",
+						"          VoteAverage as double",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     format: 'document') ~> CosmosRawItem",
+						"source(output(",
+						"          ItemId as integer,",
+						"          BuyCount as integer,",
+						"          ViewDetailsCount as integer,",
+						"          AddToCartCount as integer,",
+						"          VoteCount as integer",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     format: 'document') ~> CosmosRawItemAggregate",
+						"source(output(",
+						"          CategoryId as integer,",
+						"          CategoryName as string,",
+						"          Description as string,",
+						"          Products as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     format: 'document') ~> CosmosRawCategory",
+						"CosmosRawItem, CosmosRawItemAggregate join(CosmosRawItem@ItemId == CosmosRawItemAggregate@ItemId,",
+						"     joinType:'left',",
+						"     broadcast: 'auto')~> JoinItemAggregate",
+						"JoinCategory select(mapColumn(",
+						"          ItemId = CosmosRawItem@ItemId,",
+						"          ProductName,",
+						"          ImdbId,",
+						"          Description = CosmosRawItem@Description,",
+						"          ImagePath,",
+						"          ThumbnailPath,",
+						"          UnitPrice,",
+						"          CategoryId = CosmosRawItem@CategoryId,",
+						"          Category = CategoryName,",
+						"          Popularity,",
+						"          OriginalLanguage,",
+						"          ReleaseDate,",
+						"          VoteAverage,",
+						"          BuyCount,",
+						"          ViewDetailsCount,",
+						"          AddToCartCount,",
+						"          VoteCount = CosmosRawItemAggregate@VoteCount,",
+						"          CategoryDescription = CosmosRawCategory@Description",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> SelectItems",
+						"JoinItemAggregate, CosmosRawCategory join(CosmosRawItem@CategoryId == CosmosRawCategory@CategoryId,",
+						"     joinType:'left',",
+						"     broadcast: 'auto')~> JoinCategory",
+						"SelectItems sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          ItemId as integer,",
+						"          VoteCount as integer,",
+						"          ProductName as string,",
+						"          ImdbId as integer,",
+						"          Description as string,",
+						"          ImagePath as string,",
+						"          ThumbnailPath as string,",
+						"          UnitPrice as double,",
+						"          CategoryId as integer,",
+						"          Category as string,",
+						"          Popularity as double,",
+						"          OriginalLanguage as string,",
+						"          ReleaseDate as string,",
+						"          VoteAverage as double",
+						"     ),",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     recreate:true,",
+						"     format: 'document',",
+						"     partitionKey: ['/ItemId'],",
+						"     throughput: 400,",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     mapColumn(",
+						"          ItemId,",
+						"          ProductName,",
+						"          ImdbId,",
+						"          Description,",
+						"          ImagePath,",
+						"          ThumbnailPath,",
+						"          UnitPrice,",
+						"          CategoryId,",
+						"          Category,",
+						"          Popularity,",
+						"          OriginalLanguage,",
+						"          ReleaseDate,",
+						"          VoteAverage,",
+						"          BuyCount,",
+						"          ViewDetailsCount,",
+						"          AddToCartCount,",
+						"          VoteCount,",
+						"          CategoryDescription",
+						"     )) ~> WriteToCosmosItems"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/Cosmos_Raw_Item')]",
+				"[concat(variables('factoryId'), '/datasets/Cosmos_Raw_ItemAggregate')]",
+				"[concat(variables('factoryId'), '/datasets/Cosmos_Raw_Category')]",
+				"[concat(variables('factoryId'), '/datasets/Cosmos_Item')]"
+			]
 		}
 	]
 }

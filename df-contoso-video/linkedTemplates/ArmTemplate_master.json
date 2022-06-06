@@ -19,6 +19,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'CosmosDb_Contoso_Video'"
 		},
+		"CosmosDb_Contoso_Video_Raw_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'CosmosDb_Contoso_Video_Raw'"
+		},
 		"Contoso Video Azure Function_properties_typeProperties_functionAppUrl": {
 			"type": "string",
 			"defaultValue": "https://fn-contoso-video.azurewebsites.net"
@@ -59,12 +63,35 @@
 					"CosmosDb_Contoso_Video_connectionString": {
 						"value": "[parameters('CosmosDb_Contoso_Video_connectionString')]"
 					},
+					"CosmosDb_Contoso_Video_Raw_connectionString": {
+						"value": "[parameters('CosmosDb_Contoso_Video_Raw_connectionString')]"
+					},
 					"Contoso Video Azure Function_properties_typeProperties_functionAppUrl": {
 						"value": "[parameters('Contoso Video Azure Function_properties_typeProperties_functionAppUrl')]"
 					}
 				}
 			},
 			"dependsOn": []
+		},
+		{
+			"name": "df-contoso-video_ArmTemplate_1",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_1.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'df-contoso-video_ArmTemplate_0')]"
+			]
 		}
 	]
 }

@@ -14,6 +14,9 @@
 		"CosmosDb_Contoso_Video_connectionString": {
 			"value": ""
 		},
+		"CosmosDb_Contoso_Video_Raw_connectionString": {
+			"value": ""
+		},
 		"Contoso Video Azure Function_properties_typeProperties_functionAppUrl": {
 			"value": "https://fn-contoso-video.azurewebsites.net"
 		}
