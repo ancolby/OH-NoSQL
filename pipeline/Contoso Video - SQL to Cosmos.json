@@ -522,14 +522,6 @@
 						"mappings": [
 							{
 								"source": {
-									"name": "id"
-								},
-								"sink": {
-									"path": "$['id']"
-								}
-							},
-							{
-								"source": {
 									"name": "ItemId"
 								},
 								"sink": {
