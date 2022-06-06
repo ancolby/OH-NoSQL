@@ -508,7 +508,6 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
-						"sqlReaderQuery": "SELECT LOWER([id]) as id\n      ,[ItemId]\n      ,[BuyCount]\n      ,[ViewDetailsCount]\n      ,[AddToCartCount]\n      ,[VoteCount]\n  FROM [dbo].[ItemAggregate]",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
