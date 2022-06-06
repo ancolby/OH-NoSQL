@@ -9,33 +9,37 @@
 						"referenceName": "Cosmos_Raw_Item",
 						"type": "DatasetReference"
 					},
-					"name": "source1"
+					"name": "CosmosRawItem"
 				},
 				{
 					"dataset": {
 						"referenceName": "Cosmos_Raw_ItemAggregate",
 						"type": "DatasetReference"
 					},
-					"name": "source2"
+					"name": "CosmosRawItemAggregate"
 				},
 				{
 					"dataset": {
 						"referenceName": "Cosmos_Raw_Category",
 						"type": "DatasetReference"
 					},
-					"name": "source3"
+					"name": "CosmosRawCategory"
 				}
 			],
-			"sinks": [],
+			"sinks": [
+				{
+					"name": "sink1"
+				}
+			],
 			"transformations": [
 				{
-					"name": "join1"
+					"name": "JoinItemAggregate"
 				},
 				{
-					"name": "select1"
+					"name": "SelectItems"
 				},
 				{
-					"name": "join2"
+					"name": "JoinCategory"
 				}
 			],
 			"scriptLines": [
@@ -57,7 +61,7 @@
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     format: 'document') ~> source1",
+				"     format: 'document') ~> CosmosRawItem",
 				"source(output(",
 				"          ItemId as integer,",
 				"          BuyCount as integer,",
@@ -67,7 +71,7 @@
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     format: 'document') ~> source2",
+				"     format: 'document') ~> CosmosRawItemAggregate",
 				"source(output(",
 				"          CategoryId as integer,",
 				"          CategoryName as string,",
@@ -76,20 +80,20 @@
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     format: 'document') ~> source3",
-				"source1, source2 join(source1@ItemId == source2@ItemId,",
+				"     format: 'document') ~> CosmosRawCategory",
+				"CosmosRawItem, CosmosRawItemAggregate join(Contoso Raw Item@ItemId == CosmosRawItemAggregate@ItemId,",
 				"     joinType:'left',",
-				"     broadcast: 'auto')~> join1",
-				"join2 select(mapColumn(",
-				"          ItemId = source1@ItemId,",
+				"     broadcast: 'auto')~> JoinItemAggregate",
+				"JoinCategory select(mapColumn(",
+				"          ItemId = CosmosRawItem@ItemId,",
 				"          ProductName,",
 				"          ImdbId,",
-				"          Description = source1@Description,",
+				"          Description = CosmosRawItem@Description,",
 				"          ImagePath,",
 				"          ThumbnailPath,",
 				"          UnitPrice,",
-				"          CategoryId = source1@CategoryId,",
-				"          Category,",
+				"          CategoryId = CosmosRawItem@CategoryId,",
+				"          Category = CategoryName,",
 				"          Popularity,",
 				"          OriginalLanguage,",
 				"          ReleaseDate,",
@@ -97,13 +101,18 @@
 				"          BuyCount,",
 				"          ViewDetailsCount,",
 				"          AddToCartCount,",
-				"          VoteCount = source2@VoteCount",
+				"          VoteCount = CosmosRawItemAggregate@VoteCount,",
+				"          CategoryDescription = CosmosRawCategory@Description",
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> select1",
-				"join1, source3 join(source1@CategoryId == source3@CategoryId,",
+				"     skipDuplicateMapOutputs: true) ~> SelectItems",
+				"JoinItemAggregate, CosmosRawCategory join(Contoso Raw Item@CategoryId == CosmosRawCategory@CategoryId,",
 				"     joinType:'left',",
-				"     broadcast: 'auto')~> join2"
+				"     broadcast: 'auto')~> JoinCategory",
+				"SelectItems sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sink1"
 			]
 		}
 	}
