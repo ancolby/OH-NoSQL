@@ -22,7 +22,7 @@ namespace ContosoVideo
 
             // Create a container with a partition key and provision 400 RU/s manual throughput.
             string connectionString = Environment.GetEnvironmentVariable("CosmosConnectionString");
-            string databaseId = Environment.GetEnvironmentVariable("ContosoVideoDatabaseId");
+            string databaseId = Environment.GetEnvironmentVariable("ContosoVideoRawDatabaseId");
             CosmosClient client = new CosmosClient(connectionString);
             Database database = await client.CreateDatabaseIfNotExistsAsync(databaseId);
 
