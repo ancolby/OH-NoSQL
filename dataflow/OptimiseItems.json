@@ -1,0 +1,167 @@
+{
+	"name": "OptimiseItems",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "Cosmos_Raw_Item",
+						"type": "DatasetReference"
+					},
+					"name": "CosmosRawItem"
+				},
+				{
+					"dataset": {
+						"referenceName": "Cosmos_Raw_ItemAggregate",
+						"type": "DatasetReference"
+					},
+					"name": "CosmosRawItemAggregate"
+				},
+				{
+					"dataset": {
+						"referenceName": "Cosmos_Raw_Category",
+						"type": "DatasetReference"
+					},
+					"name": "CosmosRawCategory"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "Cosmos_Item",
+						"type": "DatasetReference"
+					},
+					"name": "WriteToCosmosItems"
+				}
+			],
+			"transformations": [
+				{
+					"name": "JoinItemAggregate"
+				},
+				{
+					"name": "SelectItems"
+				},
+				{
+					"name": "JoinCategory"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          ItemId as integer,",
+				"          VoteCount as integer,",
+				"          ProductName as string,",
+				"          ImdbId as integer,",
+				"          Description as string,",
+				"          ImagePath as string,",
+				"          ThumbnailPath as string,",
+				"          UnitPrice as double,",
+				"          CategoryId as integer,",
+				"          Category as string,",
+				"          Popularity as double,",
+				"          OriginalLanguage as string,",
+				"          ReleaseDate as string,",
+				"          VoteAverage as double",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'document') ~> CosmosRawItem",
+				"source(output(",
+				"          ItemId as integer,",
+				"          BuyCount as integer,",
+				"          ViewDetailsCount as integer,",
+				"          AddToCartCount as integer,",
+				"          VoteCount as integer",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'document') ~> CosmosRawItemAggregate",
+				"source(output(",
+				"          CategoryId as integer,",
+				"          CategoryName as string,",
+				"          Description as string,",
+				"          Products as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'document') ~> CosmosRawCategory",
+				"CosmosRawItem, CosmosRawItemAggregate join(CosmosRawItem@ItemId == CosmosRawItemAggregate@ItemId,",
+				"     joinType:'left',",
+				"     broadcast: 'auto')~> JoinItemAggregate",
+				"JoinCategory select(mapColumn(",
+				"          ItemId = CosmosRawItem@ItemId,",
+				"          ProductName,",
+				"          ImdbId,",
+				"          Description = CosmosRawItem@Description,",
+				"          ImagePath,",
+				"          ThumbnailPath,",
+				"          UnitPrice,",
+				"          CategoryId = CosmosRawItem@CategoryId,",
+				"          Category = CategoryName,",
+				"          Popularity,",
+				"          OriginalLanguage,",
+				"          ReleaseDate,",
+				"          VoteAverage,",
+				"          BuyCount,",
+				"          ViewDetailsCount,",
+				"          AddToCartCount,",
+				"          VoteCount = CosmosRawItemAggregate@VoteCount,",
+				"          CategoryDescription = CosmosRawCategory@Description",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> SelectItems",
+				"JoinItemAggregate, CosmosRawCategory join(CosmosRawItem@CategoryId == CosmosRawCategory@CategoryId,",
+				"     joinType:'left',",
+				"     broadcast: 'auto')~> JoinCategory",
+				"SelectItems sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          ItemId as integer,",
+				"          VoteCount as integer,",
+				"          ProductName as string,",
+				"          ImdbId as integer,",
+				"          Description as string,",
+				"          ImagePath as string,",
+				"          ThumbnailPath as string,",
+				"          UnitPrice as double,",
+				"          CategoryId as integer,",
+				"          Category as string,",
+				"          Popularity as double,",
+				"          OriginalLanguage as string,",
+				"          ReleaseDate as string,",
+				"          VoteAverage as double",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     recreate:true,",
+				"     format: 'document',",
+				"     partitionKey: ['/ItemId'],",
+				"     throughput: 400,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     mapColumn(",
+				"          ItemId,",
+				"          ProductName,",
+				"          ImdbId,",
+				"          Description,",
+				"          ImagePath,",
+				"          ThumbnailPath,",
+				"          UnitPrice,",
+				"          CategoryId,",
+				"          Category,",
+				"          Popularity,",
+				"          OriginalLanguage,",
+				"          ReleaseDate,",
+				"          VoteAverage,",
+				"          BuyCount,",
+				"          ViewDetailsCount,",
+				"          AddToCartCount,",
+				"          VoteCount,",
+				"          CategoryDescription",
+				"     )) ~> WriteToCosmosItems"
+			]
+		}
+	}
+}

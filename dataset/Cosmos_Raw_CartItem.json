@@ -1,15 +1,15 @@
 {
-	"name": "Cosmos_OrderDetails",
+	"name": "Cosmos_Raw_CartItem",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "CosmosDb_Contoso_Video",
+			"referenceName": "CosmosDb_Contoso_Video_Raw",
 			"type": "LinkedServiceReference"
 		},
 		"annotations": [],
 		"type": "CosmosDbSqlApiCollection",
 		"schema": {},
 		"typeProperties": {
-			"collectionName": "OrderDetails"
+			"collectionName": "Cartitem"
 		}
 	},
 	"type": "Microsoft.DataFactory/factories/datasets"

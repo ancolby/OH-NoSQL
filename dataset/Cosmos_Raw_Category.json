@@ -1,8 +1,8 @@
 {
-	"name": "Cosmos_Event",
+	"name": "Cosmos_Raw_Category",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "CosmosDb_Contoso_Video",
+			"referenceName": "CosmosDb_Contoso_Video_Raw",
 			"type": "LinkedServiceReference"
 		},
 		"annotations": [],
@@ -10,34 +10,22 @@
 		"schema": {
 			"type": "object",
 			"properties": {
-				"event": {
-					"type": "string"
-				},
-				"userId": {
+				"CategoryId": {
 					"type": "integer"
 				},
-				"itemId": {
-					"type": "null"
-				},
-				"orderId": {
-					"type": "null"
-				},
-				"contentId": {
-					"type": "integer"
-				},
-				"sessionId": {
+				"CategoryName": {
 					"type": "string"
 				},
-				"created": {
-					"type": "string"
+				"Description": {
+					"type": "null"
 				},
-				"region": {
+				"Products": {
 					"type": "null"
 				}
 			}
 		},
 		"typeProperties": {
-			"collectionName": "Event"
+			"collectionName": "Category"
 		}
 	},
 	"type": "Microsoft.DataFactory/factories/datasets"

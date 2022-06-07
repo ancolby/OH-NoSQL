@@ -91,7 +91,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "Cosmos_CartItem",
+						"referenceName": "Cosmos_Raw_CartItem",
 						"type": "DatasetReference"
 					}
 				]
@@ -176,7 +176,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "Cosmos_Category",
+						"referenceName": "Cosmos_Raw_Category",
 						"type": "DatasetReference"
 					}
 				]
@@ -306,7 +306,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "Cosmos_Event",
+						"referenceName": "Cosmos_Raw_Event",
 						"type": "DatasetReference"
 					}
 				]
@@ -481,7 +481,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "Cosmos_Item",
+						"referenceName": "Cosmos_Raw_Item",
 						"type": "DatasetReference"
 					}
 				]
@@ -521,17 +521,7 @@
 						"mappings": [
 							{
 								"source": {
-									"name": "id",
-									"type": "String"
-								},
-								"sink": {
-									"path": "$['id']"
-								}
-							},
-							{
-								"source": {
-									"name": "ItemId",
-									"type": "Int32"
+									"name": "ItemId"
 								},
 								"sink": {
 									"path": "$['ItemId']"
@@ -539,8 +529,7 @@
 							},
 							{
 								"source": {
-									"name": "BuyCount",
-									"type": "Int32"
+									"name": "BuyCount"
 								},
 								"sink": {
 									"path": "$['BuyCount']"
@@ -548,8 +537,7 @@
 							},
 							{
 								"source": {
-									"name": "ViewDetailsCount",
-									"type": "Int32"
+									"name": "ViewDetailsCount"
 								},
 								"sink": {
 									"path": "$['ViewDetailsCount']"
@@ -557,8 +545,7 @@
 							},
 							{
 								"source": {
-									"name": "AddToCartCount",
-									"type": "Int32"
+									"name": "AddToCartCount"
 								},
 								"sink": {
 									"path": "$['AddToCartCount']"
@@ -566,8 +553,7 @@
 							},
 							{
 								"source": {
-									"name": "VoteCount",
-									"type": "Int32"
+									"name": "VoteCount"
 								},
 								"sink": {
 									"path": "$['VoteCount']"
@@ -584,7 +570,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "Cosmos_ItemAggregate",
+						"referenceName": "Cosmos_Raw_ItemAggregate",
 						"type": "DatasetReference"
 					}
 				]
@@ -687,7 +673,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "Cosmos_OrderDetails",
+						"referenceName": "Cosmos_Raw_OrderDetails",
 						"type": "DatasetReference"
 					}
 				]
@@ -889,7 +875,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "Cosmos_Orders",
+						"referenceName": "Cosmos_Raw_Orders",
 						"type": "DatasetReference"
 					}
 				]
@@ -983,7 +969,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "Cosmos_User",
+						"referenceName": "Cosmos_Raw_User",
 						"type": "DatasetReference"
 					}
 				]
@@ -1006,7 +992,7 @@
 					"headers": {
 						"Content-Type": "application/json"
 					},
-					"body": "[\n    {\n        'name': 'Cartitem',\n        'partitionKey': 'CartId'\n    },\n    {\n        'name': 'Category',\n        'partitionKey': 'CategoryId'\n    },\n    {\n        'name': 'Event',\n        'partitionKey': 'id'\n    },\n    {\n        'name': 'Item',\n        'partitionKey': 'ItemId'\n    },\n    {\n        'name': 'ItemAggregate',\n        'partitionKey': 'id'\n    },\n    {\n        'name': 'OrderDetails',\n        'partitionKey': 'OrderId'\n    },\n    {\n        'name': 'Orders',\n        'partitionKey': 'OrderId'\n    },\n    {\n        'name': 'User',\n        'partitionKey': 'UserId'\n    }\n]"
+					"body": "[\n    {\n        'name': 'Cartitem',\n        'partitionKey': 'CartId'\n    },\n    {\n        'name': 'Category',\n        'partitionKey': 'CategoryId'\n    },\n    {\n        'name': 'Event',\n        'partitionKey': 'id'\n    },\n    {\n        'name': 'Item',\n        'partitionKey': 'ItemId'\n    },\n    {\n        'name': 'ItemAggregate',\n        'partitionKey': 'ItemId'\n    },\n    {\n        'name': 'OrderDetails',\n        'partitionKey': 'OrderId'\n    },\n    {\n        'name': 'Orders',\n        'partitionKey': 'OrderId'\n    },\n    {\n        'name': 'User',\n        'partitionKey': 'UserId'\n    }\n]"
 				},
 				"linkedServiceName": {
 					"referenceName": "Contoso Video Azure Function",
