@@ -1,0 +1,62 @@
+{
+	"name": "Cosmos_TopTenFilms",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "CosmosDb_Contoso_Video",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "CosmosDbSqlApiCollection",
+		"schema": {
+			"type": "object",
+			"properties": {
+				"ItemId": {
+					"type": "integer"
+				},
+				"VoteCount": {
+					"type": "integer"
+				},
+				"ProductName": {
+					"type": "string"
+				},
+				"ImdbId": {
+					"type": "integer"
+				},
+				"Description": {
+					"type": "string"
+				},
+				"ImagePath": {
+					"type": "string"
+				},
+				"ThumbnailPath": {
+					"type": "null"
+				},
+				"UnitPrice": {
+					"type": "number"
+				},
+				"CategoryId": {
+					"type": "integer"
+				},
+				"Category": {
+					"type": "null"
+				},
+				"Popularity": {
+					"type": "number"
+				},
+				"OriginalLanguage": {
+					"type": "string"
+				},
+				"ReleaseDate": {
+					"type": "string"
+				},
+				"VoteAverage": {
+					"type": "number"
+				}
+			}
+		},
+		"typeProperties": {
+			"collectionName": "TopTenFilms"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
